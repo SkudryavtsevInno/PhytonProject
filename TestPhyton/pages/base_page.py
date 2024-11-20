@@ -1,4 +1,4 @@
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 class BasePage:
@@ -6,15 +6,16 @@ class BasePage:
         self.driver = driver
 
     def find_element(self, locator, timeout=10):
-        """Находит элемент с ожиданием."""
         return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
 
     def click(self, locator, timeout=10):
-        """Кликает по элементу."""
-        self.find_element(locator, timeout).click()
+        element = self.find_element(locator, timeout)
+        element.click()
 
-    def send_keys(self, locator, text, timeout=10):
-        """Вводит текст в поле."""
+    def enter_text(self, locator, text, timeout=10):
         element = self.find_element(locator, timeout)
         element.clear()
         element.send_keys(text)
+
+    def get_text(self, locator, timeout=10):
+        return self.find_element(locator, timeout).text
